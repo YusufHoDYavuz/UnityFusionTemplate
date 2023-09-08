@@ -14,9 +14,19 @@ public class WeaponHandler : NetworkBehaviour
     [SerializeField] private LayerMask collisionLayers;
 
     private float lastTimeFired;
-    
+
+    private HPHandler hpHandler;
+
+    private void Awake()
+    {
+        hpHandler = GetComponent<HPHandler>();
+    }
+
     public override void FixedUpdateNetwork()
     {
+        if (hpHandler.isDead)
+            return;
+        
         //Get the Input from network
         if (GetInput(out NetworkInputData networkInputData))
         {

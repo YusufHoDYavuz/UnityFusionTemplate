@@ -6,18 +6,32 @@ using Fusion;
 
 public class CharacterMovementHandler : NetworkBehaviour
 {
+    private bool isSpawnRequested;
+    
     private NetworkCharacterControllerPrototypeCustom networkCharacterControllerPrototypeCustom;
-
-    private Camera localCamera;
+    private HPHandler hpHandler;
 
     private void Awake()
     {
         networkCharacterControllerPrototypeCustom = GetComponent<NetworkCharacterControllerPrototypeCustom>();
-        localCamera = GetComponentInChildren<Camera>();
+        hpHandler = GetComponent<HPHandler>();
     }
 
     public override void FixedUpdateNetwork()
     {
+        if (Object.HasStateAuthority)
+        {
+            if (isSpawnRequested)
+            {
+                Respawn();
+                return;
+            }
+            
+            if (hpHandler.isDead)
+                return;
+        }
+        
+        
         if (GetInput(out NetworkInputData networkInputData))
         {
             //Rotate the transform according to the client aim vector
@@ -27,7 +41,7 @@ public class CharacterMovementHandler : NetworkBehaviour
             Quaternion rotation = transform.rotation;
             rotation.eulerAngles = new Vector3(0, rotation.eulerAngles.y, rotation.eulerAngles.z);
             transform.rotation = rotation;
-            
+
             //Move
             Vector3 moveDirection = transform.forward * networkInputData.movementInput.y +
                                     transform.right * networkInputData.movementInput.x;
@@ -47,6 +61,30 @@ public class CharacterMovementHandler : NetworkBehaviour
 
     private void CheckFallRespawn()
     {
-        transform.position = Utils.GetRandomSpawnPoint();
+        if (Object.HasStateAuthority)
+        {
+            Debug.Log($"{Time.time} Respawn due to fall outside of map at position {transform.position}");
+
+            Respawn();
+        }
+    }
+
+    public void RequestSpawn()
+    {
+        isSpawnRequested = true;
+    }
+
+    private void Respawn()
+    {
+        networkCharacterControllerPrototypeCustom.TeleportToPosition(Utils.GetRandomSpawnPoint());
+
+        hpHandler.OnRespawned();
+        
+        isSpawnRequested = false;
+    }
+
+    public void SetCharacterControllerEnabled(bool isEnabled)
+    {
+        networkCharacterControllerPrototypeCustom.Controller.enabled = isEnabled;
     }
 }

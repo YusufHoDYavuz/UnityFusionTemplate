@@ -1033,6 +1033,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
   _isDead: 0
+  uiOnHitColor: {r: 1, g: 0, b: 0, a: 0.15686275}
+  uiOnHitImage: {fileID: 1660656733203000806}
+  bodyMeshRenderer: {fileID: 4276651814531519152}
+  playerModel: {fileID: 5251140770407054302}
+  deathGameObjectPrefab: {fileID: 725748389856807714, guid: 4bda94453d2ca7444a0fff05b2d425f5, type: 3}
 --- !u!1001 &4396294290768975114
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1134,6 +1139,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4c9454bc07ae4224ab48af46f3139d66, type: 3}
+--- !u!114 &1660656733203000806 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3028970767857498348, guid: 4c9454bc07ae4224ab48af46f3139d66, type: 3}
+  m_PrefabInstance: {fileID: 4396294290768975114}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &6649948648093727510 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7010868001715777052, guid: 4c9454bc07ae4224ab48af46f3139d66, type: 3}
