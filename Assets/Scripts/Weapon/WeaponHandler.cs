@@ -46,6 +46,10 @@ public class WeaponHandler : NetworkBehaviour
         if (hitInfo.Hitbox != null)
         {
             Debug.Log($"{Time.time} {transform.name} hit hitbox {hitInfo.Hitbox.transform.root.name}");
+
+            if (Object.HasStateAuthority)
+                hitInfo.Hitbox.transform.root.GetComponent<HPHandler>().OnTakeDamage();
+            
             isHitOtherPlayer = true;
         }
         else if (hitInfo.Collider != null)
@@ -76,7 +80,7 @@ public class WeaponHandler : NetworkBehaviour
 
     static void OnFireChanged(Changed<WeaponHandler> changed)
     {
-        Debug.Log($"{Time.time} On Fire Changed value {changed.Behaviour.isFiring}");
+        //Debug.Log($"{Time.time} On Fire Changed value {changed.Behaviour.isFiring}");
 
         bool isFiringCurrent = changed.Behaviour.isFiring;
         
