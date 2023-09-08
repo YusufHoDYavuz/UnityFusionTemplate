@@ -10,6 +10,8 @@ public class WeaponHandler : NetworkBehaviour
     public bool isFiring { get; set; }
 
     [SerializeField] private ParticleSystem fireParticle;
+    [SerializeField] private Transform aimPoint;
+    [SerializeField] private LayerMask collisionLayers;
 
     private float lastTimeFired;
     
@@ -28,9 +30,36 @@ public class WeaponHandler : NetworkBehaviour
         //Limit fire rate
         if (Time.time - lastTimeFired < 0.15f)
             return;
-
+        
         StartCoroutine(FireEffectCO());
 
+        //WEAPON HIT INTERACT
+        Runner.LagCompensation.Raycast(aimPoint.position, aimForwardVector, 100f, Object.InputAuthority,
+            out var hitInfo, collisionLayers, HitOptions.IncludePhysX);
+
+        float hitDistance = 100f;
+        bool isHitOtherPlayer = false;
+
+        if (hitInfo.Distance > 0)
+            hitDistance = hitInfo.Distance;
+
+        if (hitInfo.Hitbox != null)
+        {
+            Debug.Log($"{Time.time} {transform.name} hit hitbox {hitInfo.Hitbox.transform.root.name}");
+            isHitOtherPlayer = true;
+        }
+        else if (hitInfo.Collider != null)
+        {
+            Debug.Log($"{Time.time} {transform.name} hit PhysX collider {hitInfo.Collider.transform.root.name}");
+        }
+        
+        //Debug
+        if (isHitOtherPlayer)
+            Debug.DrawRay(aimPoint.position, aimForwardVector * hitDistance, Color.green, 1);
+        else
+            Debug.DrawRay(aimPoint.position, aimForwardVector * hitDistance, Color.red, 1);
+
+        
         lastTimeFired = Time.time;
     }
 
