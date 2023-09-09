@@ -1,3 +1,4 @@
+using System;
 using Fusion;
 using UnityEngine;
 using TMPro;
@@ -11,7 +12,20 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     
     [Networked(OnChanged = nameof(OnNickNameChanged))]
     public NetworkString<_16> nickName { get; set; }
+
+    private bool isPublicJoinMessageSent = false;
+
+    public LocalCameraHandler localCameraHandler;
+    [SerializeField] private GameObject localUI;
     
+    //other components
+    private NetworkInGameUIMessages networkInGameUIMessages;
+
+    private void Awake()
+    {
+        networkInGameUIMessages = GetComponent<NetworkInGameUIMessages>();
+    }
+
     public override void Spawned()
     {
         if (Object.HasInputAuthority)
@@ -38,6 +52,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             AudioListener audioListener = GetComponentInChildren<AudioListener>();
             audioListener.enabled = false;
             
+            localUI.SetActive(false);
+            
             Debug.Log("Spawn remote Player");
         }
         
@@ -47,6 +63,9 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     
     public void PlayerLeft(PlayerRef player)
     {
+        if (Object.HasStateAuthority)
+            networkInGameUIMessages.SendInGameRPCMessage(nickName.ToString(), "left!");
+        
         if (player == Object.InputAuthority)
             Runner.Despawn(Object);
     }
@@ -70,5 +89,12 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     {
         Debug.Log($"[RPC] SetNickName {nickName}");
         this.nickName = nickName;
+
+        if (!isPublicJoinMessageSent)
+        {
+            networkInGameUIMessages.SendInGameRPCMessage(nickName, "joined!");
+
+            isPublicJoinMessageSent = true;
+        }
     }
 }
