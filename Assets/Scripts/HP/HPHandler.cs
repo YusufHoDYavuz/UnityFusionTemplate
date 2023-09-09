@@ -28,11 +28,15 @@ public class HPHandler : NetworkBehaviour
     //Other Components
     private HitboxRoot hitboxRoot;
     private CharacterMovementHandler characterMovementHandler;
+    private NetworkInGameUIMessages networkInGameUIMessages;
+    private NetworkPlayer networkPlayer;
 
     private void Awake()
     {
         characterMovementHandler = GetComponent<CharacterMovementHandler>();
         hitboxRoot = GetComponentInChildren<HitboxRoot>();
+        networkInGameUIMessages = GetComponentInChildren<NetworkInGameUIMessages>();
+        networkPlayer = GetComponentInChildren<NetworkPlayer>();
     }
 
     void Start()
@@ -66,7 +70,7 @@ public class HPHandler : NetworkBehaviour
         characterMovementHandler.RequestSpawn();
     }
 
-    public void OnTakeDamage()
+    public void OnTakeDamage(string damageCausedByPlayerNickname)
     {
         //Only take damage while alive
         if (isDead)
@@ -79,6 +83,8 @@ public class HPHandler : NetworkBehaviour
         //Player die
         if (HP <= 0)
         {
+            networkInGameUIMessages.SendInGameRPCMessage(damageCausedByPlayerNickname, $"Killed <b>{networkPlayer.nickName.ToString()}</b>");
+            
             Debug.Log($"{Time.time} {transform.name} die");
 
             StartCoroutine(ServerReviveCO());

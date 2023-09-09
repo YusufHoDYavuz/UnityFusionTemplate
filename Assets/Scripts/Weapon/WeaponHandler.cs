@@ -16,10 +16,12 @@ public class WeaponHandler : NetworkBehaviour
     private float lastTimeFired;
 
     private HPHandler hpHandler;
+    private NetworkPlayer networkPlayer;
 
     private void Awake()
     {
         hpHandler = GetComponent<HPHandler>();
+        networkPlayer = GetBehaviour<NetworkPlayer>();
     }
 
     public override void FixedUpdateNetwork()
@@ -45,7 +47,7 @@ public class WeaponHandler : NetworkBehaviour
 
         //WEAPON HIT INTERACT
         Runner.LagCompensation.Raycast(aimPoint.position, aimForwardVector, 100f, Object.InputAuthority,
-            out var hitInfo, collisionLayers, HitOptions.IncludePhysX);
+            out var hitInfo, collisionLayers, HitOptions.IgnoreInputAuthority);
 
         float hitDistance = 100f;
         bool isHitOtherPlayer = false;
@@ -58,7 +60,7 @@ public class WeaponHandler : NetworkBehaviour
             Debug.Log($"{Time.time} {transform.name} hit hitbox {hitInfo.Hitbox.transform.root.name}");
 
             if (Object.HasStateAuthority)
-                hitInfo.Hitbox.transform.root.GetComponent<HPHandler>().OnTakeDamage();
+                hitInfo.Hitbox.transform.root.GetComponent<HPHandler>().OnTakeDamage(networkPlayer.nickName.ToString());
             
             isHitOtherPlayer = true;
         }

@@ -11,10 +11,15 @@ public class CharacterMovementHandler : NetworkBehaviour
     private NetworkCharacterControllerPrototypeCustom networkCharacterControllerPrototypeCustom;
     private HPHandler hpHandler;
 
+    private NetworkInGameUIMessages networkInGameUIMessages;
+    private NetworkPlayer networkPlayer;
+
     private void Awake()
     {
         networkCharacterControllerPrototypeCustom = GetComponent<NetworkCharacterControllerPrototypeCustom>();
         hpHandler = GetComponent<HPHandler>();
+        networkInGameUIMessages = GetComponent<NetworkInGameUIMessages>();
+        networkPlayer = GetComponent<NetworkPlayer>();
     }
 
     public override void FixedUpdateNetwork()
@@ -65,6 +70,8 @@ public class CharacterMovementHandler : NetworkBehaviour
         {
             Debug.Log($"{Time.time} Respawn due to fall outside of map at position {transform.position}");
 
+            networkInGameUIMessages.SendInGameRPCMessage(networkPlayer.nickName.ToString(), "fell of the world");
+            
             Respawn();
         }
     }
