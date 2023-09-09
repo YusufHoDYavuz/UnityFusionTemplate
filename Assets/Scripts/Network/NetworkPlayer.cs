@@ -1,11 +1,16 @@
 using Fusion;
 using UnityEngine;
+using TMPro;
 
 public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 {
-    public static NetworkPlayer localPlayer { get; set; }
+    [SerializeField] private TextMeshProUGUI playerNickNameTM;
 
+    public static NetworkPlayer localPlayer { get; set; }
     [SerializeField] private Transform playerModel;
+    
+    [Networked(OnChanged = nameof(OnNickNameChanged))]
+    public NetworkString<_16> nickName { get; set; }
     
     public override void Spawned()
     {
@@ -18,6 +23,8 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             
             //Disable main camera
             Camera.main.gameObject.SetActive(false);
+            
+            RPC_SetNickName(PlayerPrefs.GetString("PlayerNickname"));
             
             Debug.Log("Spawn Local Player");
         }
@@ -42,5 +49,26 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
     {
         if (player == Object.InputAuthority)
             Runner.Despawn(Object);
+    }
+    
+    static void OnNickNameChanged(Changed<NetworkPlayer> changed)
+    {
+        Debug.Log($"{Time.time} OnNicknameChanged value { changed.Behaviour.nickName}");
+
+        changed.Behaviour.OnNickNameChanged();
+    }
+
+    private void OnNickNameChanged()
+    {
+        Debug.Log($"Nickname changed for player to {nickName} for player {gameObject.name}");
+
+        playerNickNameTM.text = nickName.ToString();
+    }
+
+    [Rpc(RpcSources.InputAuthority, RpcTargets.StateAuthority)]
+    public void RPC_SetNickName(string nickName, RpcInfo info = default)
+    {
+        Debug.Log($"[RPC] SetNickName {nickName}");
+        this.nickName = nickName;
     }
 }
