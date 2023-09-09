@@ -9,7 +9,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     public static NetworkPlayer localPlayer { get; set; }
     [SerializeField] private Transform playerModel;
-    
+
     [Networked(OnChanged = nameof(OnNickNameChanged))]
     public NetworkString<_16> nickName { get; set; }
 
@@ -17,7 +17,7 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
 
     public LocalCameraHandler localCameraHandler;
     [SerializeField] private GameObject localUI;
-    
+
     //other components
     private NetworkInGameUIMessages networkInGameUIMessages;
 
@@ -31,15 +31,15 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
         if (Object.HasInputAuthority)
         {
             localPlayer = this;
-            
+
             //Sets the layer of the local players model
             Utils.SetRenderLayerInChildren(playerModel, LayerMask.NameToLayer("LocalPlayerModel"));
-            
+
             //Disable main camera
             Camera.main.gameObject.SetActive(false);
-            
+
             RPC_SetNickName(PlayerPrefs.GetString("PlayerNickname"));
-            
+
             Debug.Log("Spawn Local Player");
         }
         else
@@ -47,32 +47,42 @@ public class NetworkPlayer : NetworkBehaviour, IPlayerLeft
             //Disable the camera if we are not the local player
             Camera localCamera = GetComponentInChildren<Camera>();
             localCamera.enabled = false;
-            
+
             //Only 1 audio listener is allowed in the scene so disable remote players audio listener
             AudioListener audioListener = GetComponentInChildren<AudioListener>();
             audioListener.enabled = false;
-            
+
             localUI.SetActive(false);
-            
+
             Debug.Log("Spawn remote Player");
         }
-        
+
+        Runner.SetPlayerObject(Object.InputAuthority, Object);
+
         //Make it easier to tell which player is which
         transform.name = $"P_{Object.Id}";
     }
-    
+
     public void PlayerLeft(PlayerRef player)
     {
         if (Object.HasStateAuthority)
-            networkInGameUIMessages.SendInGameRPCMessage(nickName.ToString(), "left!");
-        
+        {
+            if (Runner.TryGetPlayerObject(player, out NetworkObject playerLeftGameObjcet))
+            {
+                if (playerLeftGameObjcet == Object)
+                    localPlayer.GetComponent<NetworkInGameUIMessages>()
+                        .SendInGameRPCMessage(playerLeftGameObjcet.GetComponent<NetworkPlayer>().nickName.ToString(),
+                            "left!");
+            }
+        }
+
         if (player == Object.InputAuthority)
             Runner.Despawn(Object);
     }
-    
+
     static void OnNickNameChanged(Changed<NetworkPlayer> changed)
     {
-        Debug.Log($"{Time.time} OnNicknameChanged value { changed.Behaviour.nickName}");
+        Debug.Log($"{Time.time} OnNicknameChanged value {changed.Behaviour.nickName}");
 
         changed.Behaviour.OnNickNameChanged();
     }
