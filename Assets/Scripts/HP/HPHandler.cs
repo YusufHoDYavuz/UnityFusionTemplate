@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 using Fusion;
@@ -24,6 +25,8 @@ public class HPHandler : NetworkBehaviour
 
     [SerializeField] private GameObject playerModel;
     [SerializeField] private GameObject deathGameObjectPrefab;
+    
+    [SerializeField] private Image healthBarUI;
 
     //Other Components
     private HitboxRoot hitboxRoot;
@@ -42,6 +45,7 @@ public class HPHandler : NetworkBehaviour
     void Start()
     {
         HP = startingHP;
+        UpdateFillAmountSmooth(healthBarUI, HP);
         isDead = false;
         defaultMeshBodyColor = bodyMeshRenderer.material.color;
 
@@ -97,12 +101,14 @@ public class HPHandler : NetworkBehaviour
     {
         Debug.Log($"{Time.time} OnHPChanged value {changed.Behaviour.HP} die");
 
+        UpdateFillAmountSmooth(changed.Behaviour.healthBarUI, changed.Behaviour.HP);
+
         byte newHP = changed.Behaviour.HP;
 
         changed.LoadOld();
 
         byte oldHP = changed.Behaviour.HP;
-
+        
         //Check if the HP has been decreased
         if (newHP < oldHP)
             changed.Behaviour.OnHPReduced();
@@ -159,6 +165,13 @@ public class HPHandler : NetworkBehaviour
     public void OnRespawned()
     {
         HP = startingHP;
+        healthBarUI.fillAmount = HP;
         isDead = false;
+    }
+
+    private static void UpdateFillAmountSmooth(Image hpImage, byte hp)
+    {
+        hpImage.DOFillAmount(hp / 100f, 0.5f);
+
     }
 }
