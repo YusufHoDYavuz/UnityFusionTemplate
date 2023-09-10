@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 using Fusion;
 
@@ -27,6 +28,7 @@ public class HPHandler : NetworkBehaviour
     [SerializeField] private GameObject deathGameObjectPrefab;
     
     [SerializeField] private Image healthBarUI;
+    public TextMeshProUGUI healthbarPercent { get; set; }
 
     //Other Components
     private HitboxRoot hitboxRoot;
@@ -171,7 +173,7 @@ public class HPHandler : NetworkBehaviour
 
     private static void UpdateFillAmountSmooth(Image hpImage, byte hp)
     {
+        
         hpImage.DOFillAmount(hp / 100f, 0.5f);
-
     }
 }
