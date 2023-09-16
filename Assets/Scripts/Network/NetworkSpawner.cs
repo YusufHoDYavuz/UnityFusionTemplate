@@ -3,22 +3,34 @@ using System.Collections.Generic;
 using Fusion;
 using Fusion.Sockets;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class NetworkSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPlayer playerPrefab;
+    private List<Vector3> spawnPoints = new();
 
     //Other Components
     private CharacterInputHandler characterInputHandler;
 
     #region Network Runner Call Backs
 
+    private void Start()
+    {
+        spawnPoints.Add(new Vector3(0,1,25));
+        spawnPoints.Add(new Vector3(7,1,-18));
+        spawnPoints.Add(new Vector3(-16,1,5));
+        spawnPoints.Add(new Vector3(17,1,-10));
+    }
+
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (runner.IsServer)
         {
+            int randomValue = Random.Range(0, spawnPoints.Count);
             Debug.Log("On Player Joined we are server. Spawning Player");
-            runner.Spawn(playerPrefab, Utils.GetRandomSpawnPoint(), Quaternion.identity, player);
+            runner.Spawn(playerPrefab, spawnPoints[randomValue], Quaternion.identity, player);
+            spawnPoints.RemoveAt(randomValue);
         }
         else Debug.Log("On Player Joined");
     }
