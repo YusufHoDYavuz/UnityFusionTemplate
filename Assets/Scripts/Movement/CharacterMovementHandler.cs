@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
+using Random = UnityEngine.Random;
 
 public class CharacterMovementHandler : NetworkBehaviour
 {
@@ -14,6 +15,9 @@ public class CharacterMovementHandler : NetworkBehaviour
     private NetworkInGameUIMessages networkInGameUIMessages;
     private NetworkPlayer networkPlayer;
 
+    public List<Vector3> spawnPoints = new();
+    private Vector3 previousPoint;
+    
     private void Awake()
     {
         networkCharacterControllerPrototypeCustom = GetComponent<NetworkCharacterControllerPrototypeCustom>();
@@ -83,7 +87,8 @@ public class CharacterMovementHandler : NetworkBehaviour
 
     private void Respawn()
     {
-        networkCharacterControllerPrototypeCustom.TeleportToPosition(Utils.GetRandomSpawnPoint());
+        int randomValue = Random.Range(0, spawnPoints.Count);
+        networkCharacterControllerPrototypeCustom.TeleportToPosition(spawnPoints[randomValue]);
 
         hpHandler.OnRespawned();
         

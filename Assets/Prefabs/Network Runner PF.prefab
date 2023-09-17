@@ -58,3 +58,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 8473351502926455713, guid: 425d411899a05bf4ea9fd07de0d565b7, type: 3}
+  spawnPoints:
+  - {x: 0, y: 1, z: 25}
+  - {x: 7, y: 1, z: -18}
+  - {x: -16, y: 1, z: 5}
+  - {x: 17, y: 1, z: -10}

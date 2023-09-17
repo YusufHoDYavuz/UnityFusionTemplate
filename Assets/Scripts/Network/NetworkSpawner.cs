@@ -8,7 +8,9 @@ using Random = UnityEngine.Random;
 public class NetworkSpawner : MonoBehaviour, INetworkRunnerCallbacks
 {
     [SerializeField] private NetworkPlayer playerPrefab;
-    private List<Vector3> spawnPoints = new();
+    
+    public List<Vector3> spawnPoints = new();
+    private List<Vector3> firstSpawnPoint = new();
 
     //Other Components
     private CharacterInputHandler characterInputHandler;
@@ -17,20 +19,21 @@ public class NetworkSpawner : MonoBehaviour, INetworkRunnerCallbacks
 
     private void Start()
     {
-        spawnPoints.Add(new Vector3(0,1,25));
-        spawnPoints.Add(new Vector3(7,1,-18));
-        spawnPoints.Add(new Vector3(-16,1,5));
-        spawnPoints.Add(new Vector3(17,1,-10));
+        for (int i = 0; i < spawnPoints.Count; i++)
+        {
+            firstSpawnPoint.Add(spawnPoints[i]);
+        }
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         if (runner.IsServer)
         {
-            int randomValue = Random.Range(0, spawnPoints.Count);
             Debug.Log("On Player Joined we are server. Spawning Player");
-            runner.Spawn(playerPrefab, spawnPoints[randomValue], Quaternion.identity, player);
-            spawnPoints.RemoveAt(randomValue);
+            
+            int randomValue = Random.Range(0, firstSpawnPoint.Count);
+            runner.Spawn(playerPrefab, firstSpawnPoint[randomValue], Quaternion.identity, player);
+            firstSpawnPoint.RemoveAt(randomValue);
         }
         else Debug.Log("On Player Joined");
     }
