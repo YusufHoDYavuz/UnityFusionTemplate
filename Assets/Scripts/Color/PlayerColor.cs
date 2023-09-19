@@ -14,6 +14,7 @@ public class PlayerColor : NetworkBehaviour
     void Start()
     {
         networkedColor = Singleton.instance.GetRandomColor();
+        Singleton.instance.RemoveColorValue();
     }
 
     public static void NetworkColorChanged(Changed<PlayerColor> changed)

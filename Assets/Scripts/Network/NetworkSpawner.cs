@@ -33,9 +33,6 @@ public class NetworkSpawner : MonoBehaviour, INetworkRunnerCallbacks
             
             int randomValue = Random.Range(0, firstSpawnPoint.Count);
             runner.Spawn(playerPrefab, firstSpawnPoint[randomValue], Quaternion.identity, player);
-            playerPrefab.GetComponentInChildren<MeshRenderer>().material.color =
-                Singleton.instance.playerColors[randomValue];
-            Singleton.instance.playerColors.RemoveAt(randomValue);
             firstSpawnPoint.RemoveAt(randomValue);
         }
         else Debug.Log("On Player Joined");

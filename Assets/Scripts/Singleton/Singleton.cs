@@ -7,6 +7,7 @@ public class Singleton : MonoBehaviour
     public static Singleton instance;
 
     public List<Color> playerColors;
+    private int randomColor;
     
     private void Awake()
     {
@@ -20,7 +21,12 @@ public class Singleton : MonoBehaviour
 
     public Color GetRandomColor()
     {
-        int randomColor = Random.Range(0, playerColors.Count);
+        randomColor = Random.Range(0, playerColors.Count);
         return playerColors[randomColor];
+    }
+
+    public void RemoveColorValue()
+    {
+        playerColors.RemoveAt(randomColor);
     }
 }
