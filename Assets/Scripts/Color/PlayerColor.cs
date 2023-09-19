@@ -13,8 +13,7 @@ public class PlayerColor : NetworkBehaviour
     
     void Start()
     {
-        float randomValue = Random.Range(0f, 1f);
-        networkedColor = new Color(randomValue, randomValue, randomValue, 1f);
+        networkedColor = Singleton.instance.GetRandomColor();
     }
 
     public static void NetworkColorChanged(Changed<PlayerColor> changed)

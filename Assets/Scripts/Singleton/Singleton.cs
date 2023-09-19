@@ -17,4 +17,10 @@ public class Singleton : MonoBehaviour
 
         instance = this;
     }
+
+    public Color GetRandomColor()
+    {
+        int randomColor = Random.Range(0, playerColors.Count);
+        return playerColors[randomColor];
+    }
 }

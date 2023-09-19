@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1135044240351837787}
   - component: {fileID: 8756695426206625063}
   - component: {fileID: 7162786134015710550}
-  - component: {fileID: 1154242632137444601}
+  - component: {fileID: 3537231879733548083}
   m_Layer: 0
   m_Name: Network Runner PF
   m_TagString: Untagged
@@ -64,7 +64,7 @@ MonoBehaviour:
   - {x: 7, y: 1, z: -18}
   - {x: -16, y: 1, z: 5}
   - {x: 17, y: 1, z: -10}
---- !u!114 &1154242632137444601
+--- !u!114 &3537231879733548083
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -73,6 +73,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5080065529740136977}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af22704ddd080494ab917ea2811d56bb, type: 3}
+  m_Script: {fileID: 11500000, guid: c38d7d7bb2b5dcc4c83f95dea5fd2b68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerColors:
+  - {r: 1, g: 0, b: 0, a: 0}
+  - {r: 1, g: 0.90630996, b: 0, a: 0}
+  - {r: 0.2300446, g: 1, b: 0, a: 0}
+  - {r: 0, g: 1, b: 0.91142464, a: 0}
