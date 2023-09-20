@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
+using TMPro;
 
 public class Area : NetworkBehaviour
 {
-    
+    [SerializeField] private TextMeshProUGUI timer;
+        
     private float coolDownTime = 3f;
     private bool isStartTime = false;
 
@@ -23,6 +25,8 @@ public class Area : NetworkBehaviour
         if (isStartTime)
         {
             coolDownTime -= Time.deltaTime;
+            timer.text = coolDownTime.ToString("F1");
+            
             if (coolDownTime <= 0f)
             {
                 FinishedTime();
@@ -45,6 +49,7 @@ public class Area : NetworkBehaviour
         {
             isStartTime = false;
             coolDownTime = 3f;
+            timer.text = coolDownTime.ToString("F1");
         }
     }
     
@@ -54,4 +59,5 @@ public class Area : NetworkBehaviour
         coolDownTime = 3f;
         isStartTime = false;
     }
+    
 }
