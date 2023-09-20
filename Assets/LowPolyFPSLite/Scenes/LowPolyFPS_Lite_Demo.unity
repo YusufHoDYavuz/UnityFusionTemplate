@@ -5936,6 +5936,7 @@ GameObject:
   - component: {fileID: 1970798585}
   - component: {fileID: 1970798584}
   - component: {fileID: 1970798588}
+  - component: {fileID: 1970798589}
   m_Layer: 0
   m_Name: area1
   m_TagString: Untagged
@@ -6042,6 +6043,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
+--- !u!114 &1970798589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970798583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectInterest: 1
+  DefaultInterestGroups: []
+  DestroyWhenStateAuthorityLeaves: 1
+  AllowStateAuthorityOverride: 0
+  AoiPositionSource: {fileID: 0}
+  Flags: 2561
+  NetworkGuid:
+    RawGuidValue: c773a8a92c174cabbb6977f21a00859d
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 1970798588}
+  SimulationBehaviours: []
 --- !u!1001 &1978355517
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6420,6 +6445,7 @@ GameObject:
   - component: {fileID: 2095036218}
   - component: {fileID: 2095036217}
   - component: {fileID: 2095036216}
+  - component: {fileID: 2095036221}
   m_Layer: 0
   m_Name: area1 (1)
   m_TagString: Untagged
@@ -6526,6 +6552,30 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2095036221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2095036215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectInterest: 1
+  DefaultInterestGroups: []
+  DestroyWhenStateAuthorityLeaves: 1
+  AllowStateAuthorityOverride: 0
+  AoiPositionSource: {fileID: 0}
+  Flags: 2561
+  NetworkGuid:
+    RawGuidValue: fdfce33804674ef399bd29e1e21381cd
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 2095036216}
+  SimulationBehaviours: []
 --- !u!1001 &2136136467
 PrefabInstance:
   m_ObjectHideFlags: 0
